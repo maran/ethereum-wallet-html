@@ -1,0 +1,241 @@
+<DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script src="js/ext_lib/jquery-2.0.3.js"></script>
+    <script src="js/ext_lib//bootstrap.min.js"></script>
+    <script src="js/ext_lib//angular.min.js"></script>
+    <script src="js/ext_lib//ang-bootstrap.min.js"></script>
+    <script src="js/ext_lib/angular-resource.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+    <title>Ethereum Wallet POC</title>
+
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body ng-app="Ethereum">
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Ethereum wallet</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" ng-model="search" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid" ng-controller="mainCtrl">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar" >
+            <li class="active"><a ng-click="loadTemplate('dashboard')" href="#">Overview</a></li>
+            <li><a ng-click="loadTemplate('newTx')" href="#">New transaction</a></li>
+            <li><a ng-click="loadTemplate('contracts')">Contracts</a></li>
+            <li><a ng-click="loadTemplate('contacts')" href="#">Contacts</a></li>
+          </ul>
+        </div>
+        <div ng-switch on="template" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <div>
+            <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{ alert.msg }}</alert>
+          </div>
+          <div ng-switch-when="contacts">
+            <h4>Contacts</h4>
+            <p>This page will hold your contacts that you frequently use.</p>
+            <div class="row">
+              <div class="col-xs-12 col-sm-6 col-md-6 contact">
+                <div class="well well-sm">
+                  <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                      <img src="http://placehold.it/380x300" alt="" class="img-rounded img-responsive" />
+                    </div>
+                    <div class="col-sm-6 col-md-8">
+                      <h4>Maran</h4>
+                      <i class="glyphicon glyphicon-globe"></i>a265d01e4f1b8e2aef22cf7d23e1720d49644de6</a>
+                      <i class="glyphicon glyphicon-gift"></i>Received: 4928 wei</p>
+                      <i class="glyphicon glyphicon-share-alt"></i>Send: 28 wei</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+          </div>
+          <!-- TODO: swithch to routing with templates -->
+          <div ng-switch-when="contracts">
+            <h4>Premade contracts</h4>
+            <p>In the future this place will hold premade contracts you can easily edit and broadcast over the network.</p>
+            <div class="container">
+              <div class="row">
+                <div class="col-xs-3">
+                  <div class="offer offer-default">
+                    <div class="shape">
+                      <div class="shape-text">
+                         i.e.              
+                      </div>
+                    </div>
+                    <div class="offer-content">
+                      <h3 class="lead">
+                        3 Account multisignature contract
+                      </h3>
+                      <p>To release funds from this account we need at least three signatures.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ng-switch-when="newTx">
+            <div class="col-sm-8 col-md-6" ng-controller=NewTransactionCtrl>
+              <script type="text/ng-template" id="transactionCreated.html">
+                <div class="modal-header">
+                  <h3>Transaction sent</h3>
+                </div>
+                <div class="modal-body">
+                  <p>Your transaction to {{ transaction.Recipient }} has been sent.</p>
+                  <p>Unique hash for this transaction is {{ transaction.Hash}}.</p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-primary" ng-click="ok()">OK</button>
+                </div>
+              </script>
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                  <h3 class="panel-title">New transaction</h3>
+                </div>
+                <div class="panel-body">
+                  <form role="form" name="newTransaction">
+                    <div class="form-group">
+                      <div class="input-group">
+                        <span class="input-group-addon">@</span>
+                        <input name=recipient required ng-minlength=20 type="text" ng-model=transaction.recipient class="form-control" placeholder="Recipient address">
+                      </div>
+                      <span class="error" ng-show="newTransaction.recipient.$error.minlength">Recipient is too short, should be 20 characters.</span>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <input type="number" min=1 name="amount" required class="form-control" ng-model=transaction.amount placeholder="Amount">
+                        <span class="input-group-addon">wei</span>
+                      </div>
+                      <span class="error" ng-show="newTransaction.amount.$error.min">You should sent at least 1 wei.</span>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <input type="password" name="password" required class="form-control" ng-model=transaction.password placeholder="Password">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-default" ng-click="createTx()" ng-disabled="newTransaction.$invalid">Send transaction</send>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <div ng-switch-when="dashboard">
+            <h1 class="page-header">Dashboard </h1>
+            <!-- refactor these widgets to angular -->
+            <div class="col-sm-3">
+              <div class="hero-widget well well-sm">
+                <div class="icon">
+                  <i class="glyphicon glyphicon-asterisk"></i>
+                </div>
+                <div class="text">
+                  <var>0</var>
+                  <label class="text-muted">balance</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row placeholders">
+              <div class="col-sm-3">
+                <div class="hero-widget well well-sm">
+                  <div class="icon">
+                    <i class="glyphicon glyphicon-ok"></i>
+                  </div>
+                  <div class="text">
+                    <var>{{transactions.length}}</var>
+                    <label class="text-muted">transactions</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="hero-widget well well-sm">
+                  <div class="icon">
+                    <i class="glyphicon glyphicon-user"></i>
+                  </div>
+                  <div class="text">
+                    <var>0</var>
+                    <label class="text-muted">connected peers</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h2 class="sub-header">Transactions</h2>
+            <div class="table-responsive">
+              <table class="table table-striped" ng-controller=ListTransactionCtrl>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Amount</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>In block</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="transaction in transactions | filter:search">
+                    <td>{{transaction.Hash|truncate:16}}</td>
+                    <td>{{transaction.Amount}}</td>
+                    <td>{{transaction.Sender|truncate:20}}</td>
+                    <td>{{transaction.Recipient|truncate:20}}</td>
+                    <td>Unknown</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  </body>
+</html>
