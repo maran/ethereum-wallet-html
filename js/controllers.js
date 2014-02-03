@@ -1,5 +1,8 @@
 var controllers = angular.module("controllers", ["Ethereum"])
 
+controllers.controller("balanceCtrl", ["$scope","$rootScope", "configService", function($scope, $rootScope, configService){
+}])
+
 controllers.controller("mainCtrl", ["$scope", "templateService", function($scope, templateService){
   $scope.loadTemplate = function(template){
     $scope.template = template

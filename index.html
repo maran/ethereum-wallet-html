@@ -113,8 +113,7 @@
                       <h3 class="lead">
                         3 Account multisignature contract
                       </h3>
-                      <p>To release funds from this account we need at least three signatures.
-                      </p>
+                      <p>To release funds from this contract we need at least three signatures.</p>
                     </div>
                   </div>
                 </div>
@@ -176,8 +175,8 @@
                 <div class="icon">
                   <i class="glyphicon glyphicon-asterisk"></i>
                 </div>
-                <div class="text">
-                  <var>0</var>
+                <div class="text" ng-controller="balanceCtrl">
+                  <var class="balance">{{config.LastBalance}}</var>
                   <label class="text-muted">balance</label>
                 </div>
               </div>

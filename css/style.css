@@ -1,7 +1,9 @@
 body {
   padding-top: 50px;
 }
-
+.hero-widget var.balance{
+  font-size: 35px
+}
 .sub-header {
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;

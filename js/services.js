@@ -1,6 +1,7 @@
 var services = angular.module("services", ["Ethereum"])
 
 services.factory('configService', function($resource, $rootScope){
+
   var ConfigService = $resource('/api/configs/:hash', {}, {
      'query':  {method:'GET', isArray:false},
   })
